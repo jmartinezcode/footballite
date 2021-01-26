@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FootballLeagueManager.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +27,9 @@ namespace FootballLeagueManager.Data
             }
             );
         }
+        public DbSet<LeagueModel> Leagues { get; set; }
+        public DbSet<TeamModel> Teams { get; set; }
+        public DbSet<MatchModel> Matches{ get; set; }
 
     }
 }
