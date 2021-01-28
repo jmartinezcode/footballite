@@ -15,10 +15,10 @@ namespace FootballLeagueManager.Models
         public int Id { get; set; }
         [ForeignKey("Team")]
         public int? TeamOneId { get; set; }
-        public TeamModel TeamOne { get; set; }
+        public Team TeamOne { get; set; }
         [ForeignKey("Team")]
         public int? TeamTwoId { get; set; }
-        public TeamModel TeamTwo { get; set; }
+        public Team TeamTwo { get; set; }
         [DisplayName("Score for Home Team")]
         public int ScoreForTeamOne { get; set; }
         [DisplayName("Score for Away Team")]

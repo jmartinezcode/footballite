@@ -28,8 +28,8 @@ namespace FootballLeagueManager.Data
             );
         }
         public DbSet<League> Leagues { get; set; }
-        public DbSet<TeamModel> Teams { get; set; }
-        public DbSet<MatchModel> Matches{ get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Match> Matches{ get; set; }
 
     }
 }

@@ -17,6 +17,6 @@ namespace FootballLeagueManager.Models
         public string Name { get; set; }
         [ForeignKey("League")]
         public int LeagueId { get; set; }
-        public LeagueModel League { get; set; }
+        public League League { get; set; }
     }
 }
