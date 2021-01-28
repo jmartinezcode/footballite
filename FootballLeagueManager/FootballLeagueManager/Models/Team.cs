@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FootballLeagueManager.Models
 {
-    public class LeagueModel
+    public class Team
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        [DisplayName("League Name")]
+        [DisplayName("Team Name")]
         public string Name { get; set; }
-        [Required]
-        [DisplayName("Number of Teams")]        
-        [Range(1, int.MaxValue, ErrorMessage = "Number of Teams must be greater than 0.")]        
-        public int NumberOfTeams { get; set; }
+        [ForeignKey("League")]
+        public int LeagueId { get; set; }
+        public LeagueModel League { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FootballLeagueManager.Models
 {
-    public class MatchModel
+    public class Match
     {
         [Key]
         public int Id { get; set; }
