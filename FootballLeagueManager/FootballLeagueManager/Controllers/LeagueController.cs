@@ -21,7 +21,7 @@ namespace FootballLeagueManager.Controllers
             _context = context;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             //default view when signed in
             //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -31,14 +31,22 @@ namespace FootballLeagueManager.Controllers
             return View(_leagues);
         }
 
-        // GET: LeagueController/Details/5
-        public ActionResult Details(int id)
+        // GET: LeagueTeamMatchViewModel
+        public IActionResult GetLeagueTeamMatchDetails(int leagueId)
         {
-            return View();
+            var viewModel = new LeagueTeamMatchViewModel();
+            var league = _context.Leagues.FirstOrDefault(l => l.Id == leagueId);
+            var teams = _context.Teams.Include(t => t.LeagueId == leagueId).ToList();
+            // need matches
+
+            viewModel.Day = DateTime.Today.DayOfWeek;
+            viewModel.Teams = teams;
+
+            return View(viewModel);
         }
 
         // GET: LeagueController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -46,58 +54,79 @@ namespace FootballLeagueManager.Controllers
         // POST: LeagueController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(League league)
+        public IActionResult Create(League league)
         {
-            try
+            if (ModelState.IsValid) 
             {
-
+                _context.Leagues.Add(league);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(league);
         }
 
         // GET: LeagueController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var league =  _context.Leagues.Find(id);
+            if(league == null)
+            {
+                return NotFound();
+            }
+            return View(league);
         }
 
         // POST: LeagueController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(League league)
         {
-            try
+            if (ModelState.IsValid)
             {
+                _context.Leagues.Update(league);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(league);
         }
 
         // GET: LeagueController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int leagueId, bool? saveChangesError = false)
         {
-            return View();
+            var _league = _context.Leagues.Where(m => m.Id == leagueId).FirstOrDefault();
+            if(_league == null)
+            {
+                return NotFound();
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Delete Error for " + _league.Name + "... Please contact admin";
+            }
+
+
+            return View(_league);
         }
 
         // POST: LeagueController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult DeleteConfirmed(int leagueId)
         {
+            var _league = _context.Leagues.Where(m => m.Id == leagueId).FirstOrDefault();
             try
             {
+                _context.Leagues.Remove(_league);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (DbUpdateException error)
             {
-                return View();
+                Console.WriteLine(error);
+                return RedirectToAction(nameof(Delete), new { leagueId, saveChangesError = true });
             }
         }
     }

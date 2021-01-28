@@ -10,7 +10,7 @@ namespace FootballLeagueManager.Models
     public class LeagueTeamMatchViewModel
     {
         public League League { get; set; }
-        public List<Team> Team { get; set; }
+        public List<Team> Teams { get; set; }
         public Match Match { get; set; }
         public List<Match> Matches { get; set; }
         public DayOfWeek? Day { get; set; }
