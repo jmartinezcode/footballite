@@ -37,10 +37,17 @@ namespace FootballLeagueManager.Controllers
             var viewModel = new LeagueTeamMatchViewModel();
             var league = _context.Leagues.FirstOrDefault(l => l.Id == leagueId);
             var teams = _context.Teams.Include(t => t.LeagueId == leagueId).ToList();
+            List<Match> matches = null;
+            foreach (var team in teams)
+            {
+                var matchesToAdd = _context.Matches.Where(Match => Match.TeamOneId == team.Id || Match.TeamTwoId == team.Id).AsEnumerable();
+                matches.AddRange(matchesToAdd.Where(x => !matches.Any(s => s.Id == x.Id)));
+            }
             // need matches
 
             viewModel.Day = DateTime.Today.DayOfWeek;
             viewModel.Teams = teams;
+            viewModel.Matches = matches;
 
             return View(viewModel);
         }
