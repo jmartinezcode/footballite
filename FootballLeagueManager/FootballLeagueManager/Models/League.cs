@@ -18,5 +18,8 @@ namespace FootballLeagueManager.Models
         [DisplayName("Number of Teams")]        
         [Range(1, int.MaxValue, ErrorMessage = "Number of Teams must be greater than 0.")]        
         public int NumberOfTeams { get; set; }
+        [Required]
+        [DisplayName("Extend League?")]
+        public bool isExtended { get; set; }
     }
 }
